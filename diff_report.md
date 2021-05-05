@@ -1,6 +1,7 @@
 # 2. Syscall Tracing
 
 ##syscall.c
+'''
 void
 syscall(void)
 {
@@ -19,3 +20,4 @@ syscall(void)
     curproc->tf->eax = -1;
   }
 }
+'''
