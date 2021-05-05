@@ -1,6 +1,6 @@
 # 2. Syscall Tracing
 
-##syscall.c
+## syscall.c
 ```diff
 void
 syscall(void)
