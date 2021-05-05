@@ -204,3 +204,85 @@ static int (*syscalls[])(void) = {
 +}
 ```
 
+# 5. Process Information
+
+## proc.h
+```diff
+struct proc {
+  uint sz;                     // Size of process memory (bytes)
+  pde_t* pgdir;                // Page table
+  char *kstack;                // Bottom of kernel stack for this process
+  enum procstate state;        // Process state
+  uint pid;                    // Process ID
+  struct proc *parent;         // Parent process. NULL indicates no parent
+  struct trapframe *tf;        // Trap frame for current syscall
+  struct context *context;     // swtch() here to run process
+  void *chan;                  // If non-zero, sleeping on chan
+  int killed;                  // If non-zero, have been killed
+  struct file *ofile[NOFILE];  // Open files
+  struct inode *cwd;           // Current directory
+  char name[16];               // Process name (debugging)
++  uint start_ticks;
+};
+```
+## proc.c
+```diff
+allocproc(void)
+{
+  struct proc *p;
+  char *sp;
+
+  acquire(&ptable.lock);
+  int found = 0;
+  for(p = ptable.proc; p < &ptable.proc[NPROC]; p++)
+    if(p->state == UNUSED) {
+      found = 1;
+      break;
+    }
+  if (!found) {
+    release(&ptable.lock);
+    return 0;
+  }
+  p->state = EMBRYO;
+  p->pid = nextpid++;
+  release(&ptable.lock);
+
+  // Allocate kernel stack.
+  if((p->kstack = kalloc()) == 0){
+    p->state = UNUSED;
+    return 0;
+  }
+  sp = p->kstack + KSTACKSIZE;
+
+  // Leave room for trap frame.
+  sp -= sizeof *p->tf;
+  p->tf = (struct trapframe*)sp;
+
+  // Set up new context to start executing at forkret,
+  // which returns to trapret.
+  sp -= 4;
+  *(uint*)sp = (uint)trapret;
+
+  sp -= sizeof *p->context;
+  p->context = (struct context*)sp;
+  memset(p->context, 0, sizeof *p->context);
+  p->context->eip = (uint)forkret;
+
++  p->start_ticks = ticks;
+
+  return p;
+}
+
+#elif defined(CS333_P1)
+void
+procdumpP1(struct proc *p, char *state_string)
+{
+  int current = ticks - (p->start_ticks);
++  int val1 = current/1000;
++  int val2 = current%1000;
+-  cprintf("TODO for Project 1, delete this line and implement procdumpP1() in proc.c to print a row\n");
++  cprintf("%d\t%s\t\t%d,%d\t%s\t%d\t", p->pid, p->name, val1, val2, states[p->state], p->sz);
+  return;
+}
+#endif
+```
