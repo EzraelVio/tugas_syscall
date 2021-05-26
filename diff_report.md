@@ -641,6 +641,7 @@ sys_date(void)
 +  return -1;
 +}
 +#endif //CS333_P2
+```
 
 ## testsetuid.c
 ```diff
