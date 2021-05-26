@@ -708,3 +708,12 @@ sys_date(void)
 +}
 +#endif
 ```
+
+## uproc.h
+```diff
+#ifndef UPROC_H
+#define UPROC_H
+#define STRMAX 32
++#ifdef CS333_P2
++#include "types.h"
+```
