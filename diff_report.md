@@ -183,3 +183,20 @@ initproc = p;
 +    np->gid = curproc->gid;
 +  #endif
   ```
+
+```diff
+// Switch to chosen process.  It is the process's job
+      // to release ptable.lock and then reacquire it
+      // before jumping back to us.
+#ifdef PDX_XV6
+      idle = 0;  // not idle this timeslice
+#endif // PDX_XV6
+      c->proc = p;
+      switchuvm(p);
+      p->state = RUNNING;
++      #ifdef CS333_P2
++        p->cpu_ticks_in = ticks;
++      #endif // CS333_P2
+      swtch(&(c->scheduler), p->context);
+      switchkvm();
+```
