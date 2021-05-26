@@ -223,3 +223,61 @@ sched(void)
   mycpu()->intena = intena;
 }
 ```
+
+```diff
+#if defined(CS333_P2)
+void
+procdumpP2P3P4(struct proc *p, char *state_string)
+{
+-  cprintf("TODO for Project 2, delete this line and implement procdumpP2P3P4() in proc.c to print a row\n");
+-  return;
++  uint elapsed = ticks-p->start_ticks;
++  uint elapsedLeft = (elapsed) / 1000;
++  uint elapsedRight = elapsed % 1000;
++  char *zeros = "";
++  char *cpuZeros = "";
++  uint cpuTicksTotal = p->cpu_ticks_total;
++  uint cpuSecond = cpuTicksTotal / 1000;
++  uint cpuMs = cpuTicksTotal % 1000;
++  uint ppid = p->parent ? p->parent->pid : p->pid;
++
++  if (elapsedRight < 10) {
++    zeros = "00";
++  } else if (elapsedRight < 100) {
++    zeros = "0";
++  }
++
++  if (cpuMs < 10) {
++    cpuZeros = "00";
++  } else if (cpuMs < 100) {
++    cpuZeros = "0";
++  }
++
++  cprintf(
++    "\n%d\t%s\t%d\t%d\t%d\t%d.%s%d\t%d.%s%d\t%s\t%d\t", 
++    p->pid, 
++    p->name, 
++    p->uid, 
++    p->gid, 
++    ppid, 
++    elapsedLeft, 
++    zeros, 
++    elapsedRight, 
++    cpuSecond,
++    cpuZeros,
++    cpuMs,
++    state_string, 
++    p->sz
+}
+#elif defined(CS333_P1)
+void
+procdumpP1(struct proc *p, char *state_string)
+{
+  int current = ticks - (p->start_ticks);
+  int val1 = current/1000;
+  int val2 = current%1000;
+  cprintf("%d\t%s\t\t%d,%d\t%s\t%d\t", p->pid, p->name, val1, val2, states[p->state], p->sz);
+  return;
+}
+#endif
+```
