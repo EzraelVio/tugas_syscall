@@ -10,9 +10,9 @@ ifeq ($(CS333_CFLAGS), -DPDX_XV6)
 CS333_UPROGS +=	_halt _uptime
 endif
 
-
-
-
+```
+```diff
+    
 ifeq ($(CS333_PROJECT), 2)
 CS333_CFLAGS += -DCS333_P1 -DUSE_BUILTINS -DCS333_P2
 -CS333_UPROGS += _date _time _ps
@@ -39,8 +39,8 @@ struct sleeplock;
 struct stat;
 struct superblock;
 
-
-
+```
+```diff
 
 // proc.c
 
@@ -89,7 +89,8 @@ void            printListStats(void);
 +  #include "uproc.h"
 +#endif
 
-
+```
+```diff
 
 allocproc(void)
 {
@@ -134,15 +135,16 @@ allocproc(void)
 
   p->start_ticks = ticks;
 
- +#ifdef CS333_P2
- +  p->cpu_ticks_total = 0;
- +  p->cpu_ticks_in = 0;
++ #ifdef CS333_P2
++   p->cpu_ticks_total = 0;
++   p->cpu_ticks_in = 0;
  +#endif // CS333_P2
 
   return p;
 }
 
-
+```
+```diff
 
 initproc = p;
   if((p->pgdir = setupkvm()) == 0)
@@ -158,9 +160,9 @@ initproc = p;
   p->tf->esp = PGSIZE;
   p->tf->eip = 0;  // beginning of initcode.S
 
-  +#ifdef CS333_P2
-  +  p->uid = DEFAULT_UID;
-  +  p->gid = DEFAULT_GID;
++  #ifdef CS333_P2
++    p->uid = DEFAULT_UID;
++    p->gid = DEFAULT_GID;
   +#endif
   ```
 
