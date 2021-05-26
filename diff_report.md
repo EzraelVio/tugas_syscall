@@ -83,9 +83,9 @@ void            printListStats(void);
 #include "proc.h"
 #include "spinlock.h"
 
-#ifdef CS333_P2
-  #include "uproc.h"
-#endif
++#ifdef CS333_P2
++  #include "uproc.h"
++#endif
 ```
 
 ```diff
