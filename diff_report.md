@@ -758,3 +758,36 @@ int date(struct rtcdate*);
 +int getprocs(uint max, struct uproc* table);
 +#endif 
 ```
+
+## usys.s
+```diff
+SYSCALL(fork)
+SYSCALL(exit)
+SYSCALL(wait)
+SYSCALL(pipe)
+SYSCALL(read)
+SYSCALL(write)
+SYSCALL(close)
+SYSCALL(kill)
+SYSCALL(exec)
+SYSCALL(open)
+SYSCALL(mknod)
+SYSCALL(unlink)
+SYSCALL(fstat)
+SYSCALL(link)
+SYSCALL(mkdir)
+SYSCALL(chdir)
+SYSCALL(dup)
+SYSCALL(getpid)
+SYSCALL(sbrk)
+SYSCALL(sleep)
+SYSCALL(uptime)
+SYSCALL(halt)
+SYSCALL(date)
++SYSCALL(getuid)
++SYSCALL(getgid)
++SYSCALL(getppid)
++SYSCALL(setuid)
++SYSCALL(setgid)
++SYSCALL(getprocs)
+```
