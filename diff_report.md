@@ -200,3 +200,26 @@ initproc = p;
       swtch(&(c->scheduler), p->context);
       switchkvm();
 ```
+
+```diff
+sched(void)
+{
+  int intena;
+  struct proc *p = myproc();
+
+  if(!holding(&ptable.lock))
+    panic("sched ptable.lock");
+  if(mycpu()->ncli != 1)
+    panic("sched locks");
+  if(p->state == RUNNING)
+    panic("sched running");
+  if(readeflags()&FL_IF)
+    panic("sched interruptible");
+  intena = mycpu()->intena;
++  #ifdef CS333_P2
++    p->cpu_ticks_total += (ticks - p->cpu_ticks_in);
++  #endif // CS333_P2
+  swtch(&p->context, mycpu()->scheduler);
+  mycpu()->intena = intena;
+}
+```
