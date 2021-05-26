@@ -537,3 +537,22 @@ static int (*syscalls[])(void) = {
 +#define SYS_setgid  SYS_setuid+1
 +#define SYS_getprocs    SYS_setgid+1
 ```
+
+## sysproc.c
+```diff
+#include "types.h"
+#include "x86.h"
+#include "defs.h"
+#include "date.h"
+#include "param.h"
+#include "memlayout.h"
+#include "mmu.h"
+#include "proc.h"
+#ifdef PDX_XV6
+#include "pdx-kernel.h"
+#endif // PDX_XV6
+
++#ifdef CS333_P2
++  #include "uproc.h"
++#endif  // CS333_P2
+```
