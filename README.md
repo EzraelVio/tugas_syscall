@@ -1,4 +1,4 @@
-# Assignment 1 - OS class
+# Assignment 2 - OS class
 Name  : Nehemiah Austen Pison  
 NIM   : 1313619021
 
