@@ -268,6 +268,7 @@ procdumpP2P3P4(struct proc *p, char *state_string)
 +    cpuMs,
 +    state_string, 
 +    p->sz
++    );
 }
 #elif defined(CS333_P1)
 void
