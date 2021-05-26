@@ -163,7 +163,7 @@ initproc = p;
 +  #ifdef CS333_P2
 +    p->uid = DEFAULT_UID;
 +    p->gid = DEFAULT_GID;
-  +#endif
++  #endif
   ```
 
 ```diff
