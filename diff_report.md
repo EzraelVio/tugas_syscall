@@ -9,9 +9,10 @@ CS333_CFLAGS ?= -DPDX_XV6
 ifeq ($(CS333_CFLAGS), -DPDX_XV6)
 CS333_UPROGS +=	_halt _uptime
 endif
-```
 
-```diff
+
+
+
 ifeq ($(CS333_PROJECT), 2)
 CS333_CFLAGS += -DCS333_P1 -DUSE_BUILTINS -DCS333_P2
 -CS333_UPROGS += _date _time _ps
@@ -37,9 +38,10 @@ struct spinlock;
 struct sleeplock;
 struct stat;
 struct superblock;
-```
 
-```diff
+
+
+
 // proc.c
 
 int             cpuid(void);
@@ -86,9 +88,9 @@ void            printListStats(void);
 +#ifdef CS333_P2
 +  #include "uproc.h"
 +#endif
-```
 
-```diff
+
+
 allocproc(void)
 {
   struct proc *p;
@@ -139,9 +141,9 @@ allocproc(void)
 
   return p;
 }
-```
 
-```diff
+
+
 initproc = p;
   if((p->pgdir = setupkvm()) == 0)
     panic("userinit: out of memory?");
@@ -161,3 +163,4 @@ initproc = p;
   +  p->gid = DEFAULT_GID;
   +#endif
   ```
+
