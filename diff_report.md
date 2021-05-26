@@ -138,7 +138,7 @@ allocproc(void)
 + #ifdef CS333_P2
 +   p->cpu_ticks_total = 0;
 +   p->cpu_ticks_in = 0;
- +#endif // CS333_P2
++ #endif // CS333_P2
 
   return p;
 }
