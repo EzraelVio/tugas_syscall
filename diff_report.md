@@ -71,6 +71,7 @@ void            printListStats(void);
 ```
 
 ## proc.c
+
 ```diff
 #include "types.h"
 #include "defs.h"
@@ -85,6 +86,7 @@ void            printListStats(void);
   #include "uproc.h"
 #endif
 ```
+
 ```diff
 allocproc(void)
 {
