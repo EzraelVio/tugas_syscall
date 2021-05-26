@@ -281,3 +281,82 @@ procdumpP1(struct proc *p, char *state_string)
 }
 #endif
 ```
+
+```diff
+static void
+checkProcs(const char *file, const char *func, int line)
+{
+  int found;
+  struct proc *p;
+
+  for(p = ptable.proc; p < &ptable.proc[NPROC]; p++){
+    found = findProc(p);
+    if (found) continue;
+    cprintf("checkprocs error. Called from %s, %s, @ %d\n", file, func, line);
+    panic("Process array and lists inconsistent\n");
+  }
+}
+#endif // DEBUG
+
++#ifdef CS333_P2
++int
++getprocs(uint max, struct uproc* upTable){
++  struct proc* p;
++  int procsNumber = 0;
++  acquire(&ptable.lock);
++
++  for(p = ptable.proc; p < &ptable.proc[NPROC]; p++){
++    if (procsNumber < max) {
++      if(p->state != UNUSED && p->state != EMBRYO) {
++        if(p->state >= 0 && p->state < NELEM(states) && states[p->state]){
++          safestrcpy(upTable[procsNumber].state, states[p->state],STRMAX);
++        } else {
++          safestrcpy(upTable[procsNumber].state,"???",STRMAX);
++        }
++
++        upTable[procsNumber].pid = p->pid;
++        upTable[procsNumber].uid = p->uid;
++        upTable[procsNumber].gid = p->gid;
++        upTable[procsNumber].ppid = p->parent ? p->parent->pid : p->pid;
++        upTable[procsNumber].elapsed_ticks = ticks - p->start_ticks;
++        upTable[procsNumber].CPU_total_ticks = p->cpu_ticks_total;
++        upTable[procsNumber].size = p->sz;
++        safestrcpy(upTable[procsNumber].name, p->name, STRMAX);
++        procsNumber++;
++      }
++    } else {
++      break;
++    }
++  }
++  release(&ptable.lock);
++  return procsNumber;
++}
++#endif // CS333_P2
+```
+
+## proc.h
+```diff
+struct proc {
+  uint sz;                     // Size of process memory (bytes)
+  pde_t* pgdir;                // Page table
+  char *kstack;                // Bottom of kernel stack for this process
+  enum procstate state;        // Process state
+  uint pid;                    // Process ID
+  struct proc *parent;         // Parent process. NULL indicates no parent
+  struct trapframe *tf;        // Trap frame for current syscall
+  struct context *context;     // swtch() here to run process
+  void *chan;                  // If non-zero, sleeping on chan
+  int killed;                  // If non-zero, have been killed
+  struct file *ofile[NOFILE];  // Open files
+  struct inode *cwd;           // Current directory
+  char name[16];               // Process name (debugging)
+  uint start_ticks;
+
++  #ifdef CS333_P2
++    uint uid;
++    uint gid;
++    uint cpu_ticks_total;
++    uint cpu_ticks_in;
++  #endif
+};
+```
