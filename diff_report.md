@@ -1,6 +1,6 @@
-#Kode yang sudah dirubah
+# Kode yang sudah dirubah
 
-##Makefile
+## Makefile
 ```diff
 -CS333_PROJECT ?= 1
 +CS333_PROJECT ?= 2
